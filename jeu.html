@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>TP Javascript</title>
+<style>
+	div.terrain{
+		background: green;
+		border-radius: 0px;
+		border-color : 00000;
+		width: 800px; 
+		height: 300px;
+		position:  absolute;  
+		top: 0px;
+		left: 0px;
+		margin:0px;
+	}
+	div.serpent{
+		background: white;
+		border-radius: 4px;
+		width: 50px; 
+		height: 50px;
+		position:  absolute;  
+		top: 10px;
+		left: 10px;
+		margin:0px;
+	}
+	div.fruit{
+		background: yellow;
+		border-radius: 4px;
+		width: 10px; 
+		height: 10px;
+		position:  absolute;  
+		top: 200px;
+		left: 200px;
+		margin:0px;
+	}
+	form {
+		position:  absolute;  
+		top: 50px;
+		left: 820px;
+	}
+	.test 
+	{
+		position:  absolute;  
+		top: 50px;
+		left: 820px;
+		width: 100px;
+		height: 100px;
+		background-color: green;
+	}
+	.test2
+	{
+		position:  absolute;  
+		top: 150px;
+		left: 820px;
+		width: 100px;
+		height: 100px;
+		background-color: red;
+	}
+	.test3
+	{
+		position:  absolute;  
+		top: 250px;
+		left: 820px;
+		
+	}
+</style>
+</head>
+<body>
+    <div class="terrain" id="terrain"></div>
+	<div class="serpent" id="c1"></div>
+	<button class="test" onclick="onstart()" id="start_button">START</button>
+	<button class="test2" onclick="offstart()" id="stop_button">STOP</button>
+	<p class="test3" id="nombremange">Mangé : 0</p>
+	<script>
+		// taille du terrain
+		const LARGEUR = 800;
+		var nbFruitsManges = 0;
+		const HAUTEUR = 200;
+		// les 4 directions
+		const BAS='ArrowDown';
+		const HAUT='ArrowUp';
+		const GAUCHE='ArrowLeft';
+		const DROITE='ArrowRight';
+		// direction de déplacement du serpent
+		var direction=DROITE; 
+		// le nb de fruits
+		var nbFruits = 10;
+		// le jeu
+		function avancer() 
+		{
+			var serpent = document.getElementById('c1')
+
+			if (direction==DROITE && serpent.offsetLeft+50 <LARGEUR) 
+			{
+				serpent.style.left =serpent.offsetLeft+10+"px";
+
+			}
+			else if (direction==GAUCHE && serpent.offsetLeft >0) 
+			{
+				serpent.style.left =serpent.offsetLeft-10+"px";
+
+			}
+			else if (direction==HAUT && serpent.offsetTop>0) 
+			
+			{
+				serpent.style.top = serpent.offsetTop-10+'px'
+			}
+			else if (direction==BAS && serpent.offsetTop-50<200) 
+			
+			{
+				serpent.style.top = serpent.offsetTop+10+'px'
+			}
+			var fruits = document.getElementById('terrain')
+
+			fruits.childNodes.forEach(function(item){
+				
+    if (item.offsetLeft> serpent.offsetLeft &&item.offsetLeft< serpent.offsetLeft+50 &&
+	item.offsetTop> serpent.offsetTop &&item.offsetTop< serpent.offsetTop+50) 
+	{
+		item.remove();
+		nbFruitsManges++;
+		var mang = document.getElementById('nombremange')
+		mang.innerHTML = "Mangé :" +nbFruitsManges
+		if (nbFruits == nbFruitsManges) 
+		{
+
+			clearInterval(jeu)
+			alert("Vous avez gagné")
+
+		}
+	}
+});
+  
+	
+
+		}
+
+
+		document.onkeydown = checkKey;
+
+function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38') {
+        // up arrow
+		direction = HAUT
+    }
+    else if (e.keyCode == '40') {
+        // down arrow
+		direction = BAS
+    }
+    else if (e.keyCode == '37') {
+       // left arrow
+	   direction = GAUCHE
+    }
+    else if (e.keyCode == '39') {
+       // right arrow
+	   direction = DROITE
+    }
+	
+
+}
+function fruits() 
+	{
+		for (var i = 0; i<nbFruits;i++) 
+		{
+			var randdd = Math.floor(Math.random() * HAUTEUR);
+			var randdd2 = Math.floor(Math.random() * LARGEUR);
+
+		var fruit = document.createElement('div')
+		fruit.className = 'fruit';
+		fruit.setAttribute("id","f"+i)
+		fruit.style.top = randdd+'px';
+		fruit.style.left = randdd2+'px';
+
+		var terrain = document.getElementById('terrain')
+		terrain.appendChild(fruit)
+		}
+
+	}
+var jeu ; // à déclarer comme variable globale
+		  function onstart() 
+		  {
+			fruits();
+			jeu =setInterval(avancer, 100) ; // en fin de script
+
+		  }
+		  function offstart() 
+		  {
+			
+			clearInterval(jeu) ; // en fin de script
+
+		  }
+	</script> 
+	
+</body>
+</html>
